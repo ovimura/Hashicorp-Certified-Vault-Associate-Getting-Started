@@ -1,0 +1,23 @@
+
+
+
+
+LDAP Auth Method Lab - https://play.instruqt.com/HashiCorp-EA/tracks/ldap-auth-method
+Kubernetes Auth Method Lab - https://play.instruqt.com/HashiCorp-EA/tracks/kubernetes-auth
+AppRole Auth Method Lab    - https://play.instruqt.com/HashiCorp-EA/tracks/approle-auth-method
+AWS Auth Method Lab - https://play.instruqt.com/HashiCorp-EA/tracks/aws-auth-method
+
+
+Docs:
+https://hashicorp-services.github.io/enablement-vault-slides/pdfs/Vault_Enterprise_Detailed_Agenda.pdf
+
+Alex - Auth Method Plugin Sample - https://github.com/hashicorp/vault-auth-plugin-example
+
+Vault Plugin Development - https://www.vaultproject.io/docs/plugins/plugin-development
+Customized Secrets Engine - https://learn.hashicorp.com/collections/vault/custom-secrets-engine
+Customized Auth Method - https://learn.hashicorp.com/tutorials/vault/plugin-backends?in=vault/auth-methods#deploy-a-custom-auth-plugin
+
+
+
+
+

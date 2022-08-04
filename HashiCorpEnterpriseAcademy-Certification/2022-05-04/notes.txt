@@ -1,0 +1,38 @@
+
+
+https://hashicorp-services.github.io/enablement-vault-slides/pdfs/Vault_Enterprise_Detailed_Agenda.pdf
+
+Spring Vault Library - https://github.com/spring-projects/spring-vault
+
+https://spring.io/guides/gs/vault-config/
+
+Spring Vault Library - https://github.com/spring-projects/spring-vault
+
+
+https://hashicorp-services.github.io/enablement-vault-slides/pdfs/Vault_Enterprise_Detailed_Agenda.pdf
+
+QBQ 
+
+pi-docs/libraries
+
+
+HashiCorp Vault / Java Spring Videos - https://www.google.com/search?q=hashicorp+vault+spring&sxsrf=ALiCzsZaT4UjQtFt3AArUJsRtz8MmkHfpA:1651675335963&source=lnms&tbm=vid&sa=X&ved=2ahUKEwjFubyNisb3AhXFpnIEHTSmDEMQ_AUoA3oECAEQBQ
+Vault Libraries - https://www.vaultproject.io/api-docs/libraries
+
+
+https://spring.io/guides/gs/vault-config/
+
+
+Lab - Replication: https://play.instruqt.com/HashiCorp-EA/tracks/vault-replication
+
+
+Paths requiring sudo access - https://learn.hashicorp.com/tutorials/vault/policies#root-protected-api-endpoints
+
+Tokens and Policies Lab: https://play.instruqt.com/HashiCorp-EA/tracks/tokens-policies
+
+Bryan's GitHub Repo - https://github.com/btkrausen/hashicorp/tree/master/vault
+
+
+
+
+

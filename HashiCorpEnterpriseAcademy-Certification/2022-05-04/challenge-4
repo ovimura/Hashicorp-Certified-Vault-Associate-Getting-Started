@@ -1,0 +1,112 @@
+root@vault-eu-2:~# consul members
+Node         Address           Status  Type    Build      Protocol  DC   Segment
+consul-eu-2  10.132.2.71:8301  alive   server  1.8.8+ent  2         eu2  <all>
+vault-eu-2   10.132.2.65:8301  alive   client  1.8.8+ent  2         eu2  <default>
+root@vault-eu-2:~# vault status
+Key                      Value
+---                      -----
+Recovery Seal Type       shamir
+Initialized              true
+Sealed                   false
+Total Recovery Shares    3
+Threshold                2
+Version                  1.5.7+ent
+Cluster Name             vault-cluster-9be2cf50
+Cluster ID               5572e9f4-2466-d7f3-b2a3-ba96fdbf8745
+HA Enabled               true
+HA Cluster               https://10.132.2.65:444
+HA Mode                  active
+Last WAL                 20
+root@vault-eu-2:~# consul license get
+License is valid
+License ID: 968df2e4-3f3e-13ba-7f3f-dc26b5000ba9
+Customer ID: 09e9a6f0-a524-6b38-2352-a66f0f1980d1
+Expires At: 2022-05-31 00:00:00 +0000 UTC
+Terminates At: 2022-05-31 00:00:00 +0000 UTC
+Datacenter: *
+Package: premium
+Licensed Features:
+        Automated Backups
+        Automated Upgrades
+        Enhanced Read Scalability
+        Network Segments
+        Redundancy Zone
+        Advanced Network Federation
+        Namespaces
+        SSO
+        Audit Logging
+root@vault-eu-2:~# vault read sys/license
+WARNING! The following warnings were returned from Vault:
+
+  * time left on license is 630h39m43s
+
+Key                          Value
+---                          -----
+expiration_time              2022-05-31T00:00:00Z
+features                     [HSM Performance Replication DR Replication MFA Sentinel Seal Wrapping Control Groups Performance Standby Namespaces KMIP Entropy Augmentation Transform Secrets Engine Lease Count Quotas]
+license_id                   39686b92-cd78-b6f1-096a-4048b4206087
+performance_standby_count    9999
+start_time                   2022-01-24T00:00:00Z
+root@vault-eu-2:~# 
+
+
+---------------------------------------------------------------------------
+
+root@vault-na-2:~# consul members
+Node         Address            Status  Type    Build      Protocol  DC   Segment
+consul-na-2  10.132.2.62:8301   alive   server  1.8.8+ent  2         na2  <all>
+vault-na-2   10.132.0.135:8301  alive   client  1.8.8+ent  2         na2  <default>
+root@vault-na-2:~# vault status
+Key                      Value
+---                      -----
+Recovery Seal Type       shamir
+Initialized              true
+Sealed                   false
+Total Recovery Shares    3
+Threshold                2
+Version                  1.5.7+ent
+Cluster Name             vault-cluster-d11e844f
+Cluster ID               6feae6df-83d2-086f-0cd8-72b55e5e1d90
+HA Enabled               true
+HA Cluster               https://10.132.0.135:444
+HA Mode                  active
+Last WAL                 20
+root@vault-na-2:~# consul license get
+License is valid
+License ID: 968df2e4-3f3e-13ba-7f3f-dc26b5000ba9
+Customer ID: 09e9a6f0-a524-6b38-2352-a66f0f1980d1
+Expires At: 2022-05-31 00:00:00 +0000 UTC
+Terminates At: 2022-05-31 00:00:00 +0000 UTC
+Datacenter: *
+Package: premium
+Licensed Features:
+        Automated Backups
+        Automated Upgrades
+        Enhanced Read Scalability
+        Network Segments
+        Redundancy Zone
+        Advanced Network Federation
+        Namespaces
+        SSO
+        Audit Logging
+root@vault-na-2:~# vault read sys/license
+WARNING! The following warnings were returned from Vault:
+
+  * time left on license is 630h39m28s
+
+Key                          Value
+---                          -----
+expiration_time              2022-05-31T00:00:00Z
+features                     [HSM Performance Replication DR Replication MFA Sentinel Seal Wrapping Control Groups Performance Standby Namespaces KMIP Entropy Augmentation Transform Secrets Engine Lease Count Quotas]
+license_id                   39686b92-cd78-b6f1-096a-4048b4206087
+performance_standby_count    9999
+start_time                   2022-01-24T00:00:00Z
+root@vault-na-2:~# 
+
+----------------------------------------------------------------------------------
+
+
+
+
+
+

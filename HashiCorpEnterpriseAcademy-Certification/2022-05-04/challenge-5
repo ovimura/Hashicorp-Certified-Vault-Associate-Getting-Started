@@ -1,0 +1,131 @@
+
+
+root@vault-eu-1:~# vault write sys/replication/dr/primary/secondary-token id=EU-2 | tee /root/config-files/vault/wrapping_token.txt
+Key                              Value
+---                              -----
+wrapping_token:                  eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NvciI6IiIsImFkZHIiOiJodHRwczovLzEwLjEzMi4yLjYzOjQ0MyIsImV4cCI6MTY1MTY4Njg0OSwiaWF0IjoxNjUxNjg1MDQ5LCJqdGkiOiJzLmtxNWFad1pCR0dyamI3bzV0ZlMwUkY2WCIsIm5iZiI6MTY1MTY4NTA0NCwidHlwZSI6IndyYXBwaW5nIn0.AVfHTbYGNurENjzZms5uROuAC-Dchfp9iOKDQQHGhga9UtIewfkKKULuh3UOg2qMLmRDpPnsrqJmJVkJt8L5zRbHATDaKwJorXUoNzqsKPE8WOJVwFvabTWMRzr4_J9gBEQq-C6IWvBmyochRxOgDzUl0BkuoPN2sd5g6mHyo50HXWqJ
+wrapping_accessor:               rRXbKQiie7TiquKACn0RroQL
+wrapping_token_ttl:              30m
+wrapping_token_creation_time:    2022-05-04 17:24:09.11658312 +0000 UTC
+wrapping_token_creation_path:    sys/replication/dr/primary/secondary-token
+root@vault-eu-1:~# 
+
+root@vault-eu-1:~# vault read sys/replication/dr/status
+Key                     Value
+---                     -----
+cluster_id              415c9c80-bbfc-1fb1-42d2-72faea373712
+known_secondaries       [EU-2]
+last_dr_wal             71
+last_reindex_epoch      0
+last_wal                71
+merkle_root             09994665353839a4031f0072661d5c56c15ca3de
+mode                    primary
+primary_cluster_addr    n/a
+secondaries             [map[connection_status:disconnected node_id:EU-2]]
+state                   running
+root@vault-eu-1:~# 
+
+root@vault-eu-1:~# vault read sys/replication/dr/status
+Key                     Value
+---                     -----
+cluster_id              415c9c80-bbfc-1fb1-42d2-72faea373712
+known_secondaries       [EU-2]
+last_dr_wal             80
+last_reindex_epoch      0
+last_wal                80
+merkle_root             9fb82a154250b882dc4c06ebd6ea3aa7bb06bc29
+mode                    primary
+primary_cluster_addr    n/a
+secondaries             [map[api_address:https://10.132.2.65:443 cluster_address:https://10.132.2.65:444 connection_status:connected last_heartbeat:2022-05-04T17:27:52Z node_id:EU-2]]
+state                   running
+root@vault-eu-1:~# 
+
+root@vault-eu-2:~# vault read sys/replication/dr/status
+Key                            Value
+---                            -----
+cluster_id                     415c9c80-bbfc-1fb1-42d2-72faea373712
+connection_state               ready
+known_primary_cluster_addrs    [https://10.132.2.63:444]
+last_reindex_epoch             1651685207
+last_remote_wal                80
+merkle_root                    9fb82a154250b882dc4c06ebd6ea3aa7bb06bc29
+mode                           secondary
+primaries                      [map[api_address:https://10.132.2.63:443 cluster_address:https://10.132.2.63:444 connection_status:connected last_heartbeat:2022-05-04T17:28:17Z]]
+primary_cluster_addr           https://10.132.2.63:444
+secondary_id                   EU-2
+state                          stream-wals
+root@vault-eu-2:~# 
+
+
+
+root@vault-na-2:~# vault write -f sys/replication/dr/secondary/generate-public-key
+Key                     Value
+---                     -----
+secondary_public_key    7DdX2demODEfc4yyZmicW1cop1Me6/QHlRF08AALsFw
+root@vault-na-2:~# 
+
+
+
+vault write sys/replication/dr/primary/secondary-token id=NA-2 secondary_public_key=7DdX2demODEfc4yyZmicW1cop1Me6/QHlRF08AALsFw | tee /root/config-files/vault/sec_token.txt
+
+
+root@vault-na-1:~# vault write sys/replication/dr/primary/secondary-token id=NA-2 secondary_public_key=7DdX2demODEfc4yyZmicW1cop1Me6/QHlRF08AALsFw | tee /root/config-files/vault/sec_token.txt
+Key      Value
+---      -----
+token    eyJjbHVzdGVyX2lkIjoiYTJiOTk4MWUtYzk0MS03MzgxLWIwYTUtNjcyMmRiNGU4Zjc1IiwicHJpbWFyeV9jbHVzdGVyX2FkZHIiOiJodHRwczovLzEwLjEzMi4yLjcwOjQ0NCIsImNhX2NlcnQiOiJNSUlDWERDQ0FiNmdBd0lCQWdJSVlFdjVieHZMRWtrd0NnWUlLb1pJemowRUF3UXdNekV4TUM4R0ExVUVBeE1vY21Wd0xXUTROVGt4T1RVM0xUSmhZamd0TTJReE9DMHpZV1V5TFRnMllqQTFNemMwTkRRNU5UQWdGdzB5TWpBMU1EUXhOek13TkRaYUdBOHlNRFV5TURVd05EQTFNekV4Tmxvd016RXhNQzhHQTFVRUF4TW9jbVZ3TFdRNE5Ua3hPVFUzTFRKaFlqZ3RNMlF4T0MwellXVXlMVGcyWWpBMU16YzBORFE1TlRDQm16QVFCZ2NxaGtqT1BRSUJCZ1VyZ1FRQUl3T0JoZ0FFQUtBaitpd0U2cGtuWndsUVp2dWlIeXBiRGpQZnZLckRSNGlraXQvTEZzblNiVWFFbXUyNVJub1RnZWJnUW45Q2F6Uit6WjA3dUJUZkpMd2lhYVpGSlZqcUFWK1hVcnlBY2V5NTRhYm5ZLzdzWHpyL0xwQkVzOXFyaUZsWHJHcElscTNEV1BHQVJhQnRNSkMydVVIcEM5aDAvVkNKUWtkT2RMYWIwa1lvTnoyL2JKTVlvM2N3ZFRBT0JnTlZIUThCQWY4RUJBTUNBcXd3SFFZRFZSMGxCQll3RkFZSUt3WUJCUVVIQXdFR0NDc0dBUVVGQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d013WURWUjBSQkN3d0tvSW9jbVZ3TFdRNE5Ua3hPVFUzTFRKaFlqZ3RNMlF4T0MwellXVXlMVGcyWWpBMU16YzBORFE1TlRBS0JnZ3Foa2pPUFFRREJBT0Jpd0F3Z1ljQ1FSaXRheFFmTFFBYkhjby9YekVMSjRoSC9IUTQydzA4b0d3c2VHK2xoK1lGamJNM0dFNEh6MEc4UENVRkxsc1BqdTVtUm85ZEZyVlRnSWVuOFpWV1RNbEJBa0lCK294NFlLM1BuTnk1c3VTTmlBVnNzU2ZUcjhvSGlhV2M2NFV4Z09RenZKdEFpUy9rWm1RdDVsbC9yU2ZXclFMcHJrbzY3Q2J4a0dYWVkwSjFqS3ZCR3J3PSIsImNsaWVudF9jZXJ0IjoiTUlJQ1F6Q0NBYVdnQXdJQkFnSUlOdmtUWEpoZkozd3dDZ1lJS29aSXpqMEVBd1F3TXpFeE1DOEdBMVVFQXhNb2NtVndMV1E0TlRreE9UVTNMVEpoWWpndE0yUXhPQzB6WVdVeUxUZzJZakExTXpjME5EUTVOVEFnRncweU1qQTFNRFF4TnpNeU1URmFHQTh5TURVeU1EVXdOREExTXpJME1Wb3dMekV0TUNzR0ExVUVBeE1rTnpoaE0yVmlPV010TkdRMk55MHdNbU00TFRBNE9EY3RNekF4T1dRM09URmxPVGd4TUlHYk1CQUdCeXFHU000OUFnRUdCU3VCQkFBakE0R0dBQVFCNlcvQmFIUjh2OTcxZFliNStsY2kyVklpa0hvTDRNamk5aGZ4ZmhNbnlmc3MxblVRam5vYXlwWjdId2FPeGhkQjJKV2oybDkzdGJlMk4zY2xFNUxKSjVvQUxudlozL0NXWGxJNHg3cmd2ZWNoWUM2c0xpKzJDcGJ6L1J5dXFNTzUveWdvbnFHNVhKSjVPSEFQcFQrVlQxeEVpQUFxdUtLanJMODNxWnB3VFpWeGhlT2pZakJnTUE0R0ExVWREd0VCL3dRRUF3SURxREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQWdZSUt3WUJCUVVIQXdFd0x3WURWUjBSQkNnd0pvSWtOemhoTTJWaU9XTXROR1EyTnkwd01tTTRMVEE0T0RjdE16QXhPV1EzT1RGbE9UZ3hNQW9HQ0NxR1NNNDlCQU1FQTRHTEFEQ0Jod0pDQWJCS3ZMd2RRalArZVc1VldkNDhrUTM5OTF3anlpY280dktPOHR6TE53YjVBbDI0VlUxZDVCTHpXcFVtWGZhWDM0YktmRzFQUUpzWGdQakVKTlhIWHVjdUFrRVJZcWNpV3VSUFVhTGdtT3dQMk5tYytjVkhreEg5T3N5a1FJRjVwSEQrTC91SDRNRkl3TzM2RzFlM2orUkpkYVpTUkhJVXc1K1VwQWtLUzdaL3EyU0NwZz09IiwiY2xpZW50X2tleSI6bnVsbCwiaWQiOiJOQS0yIiwibW9kZSI6NTEyLCJwcmltYXJ5X3B1YmxpY19rZXkiOiJETDIyRGhBSzhvTGM1OU5HNUgvZHJoOFR5M1ZGZUVSbVpmSXRLVlpCZlQwPSIsImVuY3J5cHRlZF9jbGllbnRfa2V5IjoiMi9PclM4V1ZCWG9DTWp3Y1F4Szk5UDFjdG9ld3cxdzROQTJqTjQwNUcvYXVQZEhEZ08yZHBDamNVVXlBZnBxVndwY1RhVUJ1dFJ6Q0NYeTZDN1ZCdnJXYkh3Q2hKSmVzSnN1VHJPR3hhcnJXbmpJaFhEWTJxcGlSTjRyVm83VUFQZUpuTGpvVEZ4THIzSTFNYktzSFVEUXBxTm41NHBzK25zcUNGajFiM0kzWnYrNldGbWN0eWQ5OUpicjNLM1FKUlFNMjlWYkhaQ3ZHZndiYnFqeFRONUNpRWd3MVZ6UW1DT2F3bkVnWFd1bFVSNGxaQWNSQUg4VS8vdlh5dythQ3JtWVl2V3ZNVHE5NUxvaWo4TFhBNjc3RkdhdkRRVERicFRGT2R6ajQrTVgyQ2R2d29RaEVJOFNOQnp1am95WENMdFNIak4vOE1uQVRxU0Y2TGhNSmF2VTJmWHJEU0ZmK2xiOGxoTWxLMkhlcElFd3RCNllvb2Zmc2grS0tpSHZRSWMwY3d5NndybHBoVUwwUTJtNU5zd2p6UVM1VW0wRCtUQlZ5emdRbTNMYVlKeGRkRUlHajBKMW0wMmowVU9xd0NzWWhlbm1iaFUvWElYaEVzN0RscDJDWk9sRnpYR3ZvMlluQTlvRFc1REVPRnBYNDdjc2xpR1M0NzQ1Rm0ycHFVMExlbk1vYy9XekhyRHBNMCtIWlB0WXVVUUxBUkJLY3piTkVITk01K3krbFhnOC81b25lYTRtVkVkb0IvS00zeGpQUmhlMSttWDg0cWtSSCtiaG1OSnphV0ZSbXJGZ3BjcytySEUwS1NTRzVQdm5NL0lFVGZTNFhpTzNFa2FIMllHWEtIVWxoVjB2TElFMTNTM2NEbzBmaXdnUnZvb1NreVE3VndnU3RtczROc2UzaCIsIm5vbmNlIjoiQnlaR2xoOUdGeCtKeTlpZiJ9
+root@vault-na-1:~# 
+
+
+root@vault-na-1:~# vault read sys/replication/dr/status
+Key                     Value
+---                     -----
+cluster_id              a2b9981e-c941-7381-b0a5-6722db4e8f75
+known_secondaries       [NA-2]
+last_dr_wal             676
+last_reindex_epoch      0
+last_wal                676
+merkle_root             e17c7e3f6ddc78c6c10767adb6c237531e6aa197
+mode                    primary
+primary_cluster_addr    n/a
+secondaries             [map[connection_status:disconnected node_id:NA-2]]
+state                   running
+root@vault-na-1:~# 
+
+
+
+root@vault-na-2:~# vault operator generate-root -dr-token -init
+A One-Time-Password has been generated for you and is shown in the OTP field.
+You will need this value to decode the resulting root token, so keep it safe.
+Nonce         5d5eb1b5-9bbb-e8ce-ca0d-642ab0e1d476
+Started       true
+Progress      0/2
+Complete      false
+OTP           dyS3OGVN6lS9m9bmlorXuhlka3
+OTP Length    26
+root@vault-na-2:~# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

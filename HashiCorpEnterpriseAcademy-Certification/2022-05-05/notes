@@ -1,0 +1,48 @@
+
+https://www.vaultproject.io/docs
+From Gabe Maentz to Everyone 08:03 AM
+Lab: Versioned Secrets - https://play.instruqt.com/HashiCorp-EA/tracks/kvv2-versioned-secrets
+
+
+Lab: Databased Dynamic Secrets - https://play.instruqt.com/HashiCorp-EA/tracks/database-secrets-engine
+
+Kubernetes Secrets with Vault - https://www.hashicorp.com/blog/kubernetes-vault-integration-via-sidecar-agent-injector-vs-csi-provider
+Lab Vault Agent - https://play.instruqt.com/HashiCorp-EA/tracks/vault-agent
+
+
+
+
+
+PKI Certificate Lab - https://play.instruqt.com/HashiCorp-EA/tracks/pki-secrets-engine/
+Kubernetes / Secret Injection: https://www.hashicorp.com/blog/kubernetes-vault-integration-via-sidecar-agent-injector-vs-csi-provider
+
+
+
+Learn Track - https://learn.hashicorp.com/tutorials/vault/kubernetes-secret-store-driver
+
+
+
+
+
+
+
+PKI Certificate Lab - https://play.instruqt.com/HashiCorp-EA/tracks/pki-secrets-engine/
+Kubernetes / Secret Injection: https://www.hashicorp.com/blog/kubernetes-vault-integration-via-sidecar-agent-injector-vs-csi-provider
+
+Learn Track - https://learn.hashicorp.com/tutorials/vault/kubernetes-secret-store-driver
+
+
+
+
+PKI: https://www.vaultproject.io/docs/secrets/pki#be-careful-with-root-cas
+
+Managed Keys (New to v1.10.0) - https://www.vaultproject.io/docs/enterprise/managed-keys
+Feedback Form - https://docs.google.com/forms/d/e/1FAIpQLSdcXhVrNXtO2ARAqE2qgaYYXrPjZbDv4yD77tqt1JNeX0_y6Q/viewform
+
+AWS Secrets Engine Lab: https://play.instruqt.com/HashiCorp-EA/tracks/aws-secrets-engine
+GCP Secrets Engine Lab: https://play.instruqt.com/HashiCorp-EA/tracks/gcp-secrets-engine
+
+
+
+
+Gabe Maentz - gmaentz@riverpointtechnology.com

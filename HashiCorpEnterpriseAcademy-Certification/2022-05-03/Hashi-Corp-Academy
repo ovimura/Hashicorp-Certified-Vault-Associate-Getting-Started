@@ -1,0 +1,94 @@
+
+10am-1pm
+
+1hr break
+
+2pm-5pm
+
+
+name
+Company
+Application Architect
+What to try to get out of course: Learning the features of Hashi and how to integrate with applications
+
+PST
+
+
+Ovi: I work for Bank of America as Application Architect. I am looking to learn more about Hashi Corp Vault
+features, architectures and how to integrate with other applications. PST.
+
+
+
+
+https://learn.hashicorp.com/tutorials/vault/raft-reference-architecture
+
+https://learn.hashicorp.com/tutorials/vault/production-hardening
+
+
+
+
+
+Vault Academy Lab Links: https://play.instruqt.com/HashiCorp-EA/invite/5rcnkj354qbi
+Lab: Deploy Vault with Raft Storage - https://play.instruqt.com/HashiCorp-EA/tracks/deploy-vault-raft
+
+
+
+load balancer: vault-cluster
+
+ssh vault-cluster cat /usr/local/etc/haproxy/haproxy-VaultLB.cfg
+
+Unseal Key 1: eLTB3ryYL5IoqAKIfFvQU6CVBgIA9um0MQk8t+6bd25e
+Unseal Key 2: q0EhsiIK8nMyrRZ2SZqbo8RZm1T00r7fU12v256aTxlR
+Unseal Key 3: XT3e8fpF0a1FCLR6hghzepR9ICypGud7xWfBmGy7Ngyl
+
+Initial Root Token: s.ILZ9qUpBFPpG1xwtzBnVp8vs
+
+
+yes...you should be able to move to the next challenge after a succesful check
+rm -rf /opt/vault/datamkdir -p /opt/vault/data
+chown vault:vault /opt/vault/data
+rm -rf /opt/vault/data
+mkdir -p /opt/vault/data
+chown vault:vault /opt/vault/data
+
+
+sudo systemctl status vault
+sudo systemctl restart vault
+
+
+
+
+
+
+vault operator init -key-shares=3 -key-threshold=2 | tee /root/vault-initialization.txt
+
+Unseal Key 1: acVkwYOHJlDGWfFSkCyxqYb8Ggu1bclRci7pD5WkYkka
+Unseal Key 2: YXNP+QPE9+XeaA8JqZ//Zoop84/icUkCx/rbcBI20djO
+Unseal Key 3: HcBFloKUwcta+Q3dRJBv9cghqjB0y8iq6XDXcTBQ3iNE
+
+Initial Root Token: s.LjNflu2gh5JY4uQYPrTRrGDW
+
+Vault initialized with 3 key shares and a key threshold of 2. Please securely
+distribute the key shares printed above. When the Vault is re-sealed,
+restarted, or stopped, you must supply at least 2 of these keys to unseal it
+before it can start servicing requests.
+
+Vault does not store the generated master key. Without at least 2 keys to
+reconstruct the master key, Vault will remain permanently sealed!
+
+It is possible to generate new unseal keys, provided you have a quorum of
+existing unseal keys shares. See "vault operator rekey" for more information.
+
+
+
+export VAULT_TOKEN=s.LjNflu2gh5JY4uQYPrTRrGDW
+
+
+Sentinel Policies - https://www.hashicorp.com/sentinel
+
+-------------------------------------------------------------------
+Operations Lab: https://play.instruqt.com/HashiCorp-EA/tracks/vault-operations
+
+
+
+

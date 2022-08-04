@@ -1,0 +1,82 @@
+root@vault-server:~# cat /root/config-files/initialization.txt | grep Root
+Initial Root Token: s.uBTC3AcwV4W9IYEWohq8RStg
+root@vault-server:~# 
+
+
+root@vault-server:~# vault policy write admin /root/config-files/policies/admin-policy.hcl
+Success! Uploaded policy: admin
+root@vault-server:~# vault write auth/token/roles/admin allowed_policies=admin token_period=2h orphan=true
+Success! Data written to: auth/token/roles/admin
+root@vault-server:~# vault token create -display-name=admin-1 -role=admin
+Key                  Value
+---                  -----
+token                s.Kiztfpt8Fo0JO9wR8Ld0qfOi
+token_accessor       PFugyK6DU5lzGIQKbuLVxxFe
+token_duration       2h
+token_renewable      true
+token_policies       ["admin" "default"]
+identity_policies    []
+policies             ["admin" "default"]
+root@vault-server:~# 
+
+
+
+root@vault-server:~# vault policy write admin /root/config-files/policies/admin-policy.hcl
+Success! Uploaded policy: admin
+root@vault-server:~# vault write auth/token/roles/admin allowed_policies=admin token_period=2h orphan=true
+Success! Data written to: auth/token/roles/admin
+root@vault-server:~# vault token create -display-name=admin-1 -role=admin
+Key                  Value
+---                  -----
+token                s.Kiztfpt8Fo0JO9wR8Ld0qfOi
+token_accessor       PFugyK6DU5lzGIQKbuLVxxFe
+token_duration       2h
+token_renewable      true
+token_policies       ["admin" "default"]
+identity_policies    []
+policies             ["admin" "default"]
+root@vault-server:~# export VAULT_TOKEN=s.Kiztfpt8Fo0JO9wR8Ld0qfOi
+root@vault-server:~# 
+
+
+
+sed -i '/VAULT_TOKEN/d' /root/.bash_profile
+echo "export VAULT_TOKEN=$VAULT_TOKEN" >> /root/.bash_profile
+
+root@vault-server:~# vault token create -display-name=admin-1 -role=admin
+Key                  Value
+---                  -----
+token                s.Kiztfpt8Fo0JO9wR8Ld0qfOi
+token_accessor       PFugyK6DU5lzGIQKbuLVxxFe
+token_duration       2h
+token_renewable      true
+token_policies       ["admin" "default"]
+identity_policies    []
+policies             ["admin" "default"]
+root@vault-server:~# export VAULT_TOKEN=s.Kiztfpt8Fo0JO9wR8Ld0qfOi
+root@vault-server:~# sed -i '/VAULT_TOKEN/d' /root/.bash_profile
+root@vault-server:~# echo "export VAULT_TOKEN=$VAULT_TOKEN" >> /root/.bash_profile
+root@vault-server:~# vault secrets list
+Path          Type         Accessor              Description
+----          ----         --------              -----------
+cubbyhole/    cubbyhole    cubbyhole_f6f3d7bf    per-token private secret storage
+identity/     identity     identity_cbeea956     identity store
+sys/          system       system_c984ea65       system endpoints used for control, policy and debugging
+root@vault-server:~# vault auth list
+Path      Type     Accessor               Description
+----      ----     --------               -----------
+token/    token    auth_token_e8625627    token based credentials
+root@vault-server:~# 
+
+
+
+root@vault-server:~# vault auth list
+Path      Type     Accessor               Description
+----      ----     --------               -----------
+token/    token    auth_token_e8625627    token based credentials
+root@vault-server:~# export root_token=$(cat /root/config-files/initialization.txt | grep "Initial Root Token" | cut -d":" -f2 | cut -d" " -f2)
+root@vault-server:~# vault token revoke $root_token
+Success! Revoked token (if it existed)
+root@vault-server:~# 
+root@vault-server:~# 
+

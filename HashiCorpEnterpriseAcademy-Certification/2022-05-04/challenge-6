@@ -1,0 +1,140 @@
+root@vault-na-2:~# vault operator generate-root -dr-token -init
+A One-Time-Password has been generated for you and is shown in the OTP field.
+You will need this value to decode the resulting root token, so keep it safe.
+Nonce         5d5eb1b5-9bbb-e8ce-ca0d-642ab0e1d476
+Started       true
+Progress      0/2
+Complete      false
+OTP           dyS3OGVN6lS9m9bmlorXuhlka3
+OTP Length    26
+root@vault-na-2:~# 
+
+
+root@vault-na-2:~# cat /root/config-files/vault/initialization.txt 
+Recovery Key 1: YHzScmw1B5hNsdi3iIGH0x5t60WLlcL4AGsOjQkhG5Uv
+Recovery Key 2: 8rA8hdEs/5chkXLK6UXmTs7SwIZlKa+VrJbLibHSgxlN
+Recovery Key 3: UUVtvVlFAFClfXAc4ovtKuYSe7Q0hQ81dt0hGY16Uy8q
+
+Initial Root Token: s.Kjgny4PZr86EcWE4Rb4ve5Tz
+
+Success! Vault is initialized
+
+Recovery key initialized with 3 key shares and a key threshold of 2. Please
+securely distribute the key shares printed above.
+root@vault-na-2:~# 
+
+
+
+
+root@vault-eu-1:~# cat /root/config-files/vault/initialization.txt 
+Recovery Key 1: lg3FVzminpLNCwFsUBPODrkx1cB05baq4q9aeTKikbKV
+Recovery Key 2: upZcZbUB2GJh32WgBWWzs+w5G2TeR6++na0ybEbm/RSk
+Recovery Key 3: 3ybQT6RXXSydBDFwWfbyqrDJ92hmD7o94JHu8elfWSSs
+
+Initial Root Token: s.ipmDpte8aCPU9mRnzD8Uz62d
+
+Success! Vault is initialized
+
+Recovery key initialized with 3 key shares and a key threshold of 2. Please
+securely distribute the key shares printed above.
+root@vault-eu-1:~#
+
+root@vault-na-2:~# vault operator generate-root -dr-token
+Operation nonce: 5d5eb1b5-9bbb-e8ce-ca0d-642ab0e1d476
+Unseal Key (will be hidden): 
+Nonce       5d5eb1b5-9bbb-e8ce-ca0d-642ab0e1d476
+Started     true
+Progress    1/2
+Complete    false
+root@vault-na-2:~# vault operator generate-root -dr-token
+Operation nonce: 5d5eb1b5-9bbb-e8ce-ca0d-642ab0e1d476
+Unseal Key (will be hidden): 
+Nonce            5d5eb1b5-9bbb-e8ce-ca0d-642ab0e1d476
+Started          true
+Progress         2/2
+Complete         true
+Encoded Token    F1cJei4OZgR3ATBPOE8hOhYJJRQzBz1TMwQ
+root@vault-na-2:~# 
+
+
+vault operator generate-root -dr-token -decode=F1cJei4OZgR3ATBPOE8hOhYJJRQzBz1TMwQ -otp=dyS3OGVN6lS9m9bmlorXuhlka3
+
+root@vault-na-2:~# vault operator generate-root -dr-token -decode=F1cJei4OZgR3ATBPOE8hOhYJJRQzBz1TMwQ -otp=dyS3OGVN6lS9m9bmlorXuhlka3
+s.ZIaI0JAmcvUvCWzfWLFoQ8R7
+root@vault-na-2:~# 
+
+vault write sys/license text=@/root/config-files/vault/vault.hclic dr_operation_token=s.ZIaI0JAmcvUvCWzfWLFoQ8R7
+
+root@vault-na-2:~# vault read sys/license
+WARNING! The following warnings were returned from Vault:
+
+  * time left on license is 630h13m28s
+
+Key                          Value
+---                          -----
+expiration_time              2022-05-31T00:00:00Z
+features                     [HSM Performance Replication DR Replication MFA Sentinel Seal Wrapping Control Groups Performance Standby Namespaces KMIP Entropy Augmentation Transform Secrets Engine Lease Count Quotas]
+license_id                   39686b92-cd78-b6f1-096a-4048b4206087
+performance_standby_count    9999
+start_time                   2022-01-24T00:00:00Z
+root@vault-na-2:~# 
+
+
+vault write /sys/replication/dr/secondary/promote dr_operation_token=s.ZIaI0JAmcvUvCWzfWLFoQ8R7
+
+root@vault-na-1:~# systemctl stop vault
+root@vault-na-1:~# echo $VAULT_TOKEN
+s.73GCv5IHxFepyMY9rEHcrCHK
+root@vault-na-1:~#
+
+root@vault-na-2:~# export VAULT_TOKEN=s.73GCv5IHxFepyMY9rEHcrCHK
+root@vault-na-2:~# vault kv get Replicated_Data/capitals
+====== Metadata ======
+Key              Value
+---              -----
+created_time     2022-05-04T17:09:43.866102283Z
+deletion_time    n/a
+destroyed        false
+version          1
+
+===== Data =====
+Key       Value
+---       -----
+Canada    Ottawa
+Mexico    Mexico City
+US        Washington
+root@vault-na-2:~# vault kv get Local_Data/credit_scores
+
+root@vault-na-2:~# vault kv get Non_GDPR_Data/capitals
+====== Metadata ======
+Key              Value
+---              -----
+created_time     2022-05-04T16:33:05.542749506Z
+deletion_time    n/a
+destroyed        false
+version          1
+
+===== Data =====
+Key        Value
+---        -----
+England    London
+France     Paris
+Germany    Berlin
+root@vault-na-2:~#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

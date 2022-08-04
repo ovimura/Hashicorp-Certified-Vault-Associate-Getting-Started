@@ -1,0 +1,208 @@
+root@vault-eu-1:~# vault write -f sys/replication/performance/primary/enable
+WARNING! The following warnings were returned from Vault:
+
+  * This cluster is being enabled as a primary for replication. Vault will be
+  unavailable for a brief period and will resume service shortly.
+
+root@vault-eu-1:~# vault write sys/replication/performance/primary/secondary-token id=NA-1
+Key                              Value
+---                              -----
+wrapping_token:                  eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NvciI6IiIsImFkZHIiOiJodHRwczovLzEwLjEzMi4yLjYzOjQ0MyIsImV4cCI6MTY1MTY4MzkyMiwiaWF0IjoxNjUxNjgyMTIyLCJqdGkiOiJzLmFJdWRNUVR0dWZtVWg2b1RNUmV6Z1BqWiIsIm5iZiI6MTY1MTY4MjExNywidHlwZSI6IndyYXBwaW5nIn0.ATTCbwkwRqhHEoavs4YeDkV5vqedB9iFlBaHiOk0ogLFykKriJnSNNnD1UfnzD3IiZdDzy4htDC3RCqwv2XD9hetAAI403_-jYk8l_we5zzP8jyKGlZhGsSKxdlZfqpKcX189OWr_O2vx0N8F6mlmXF4qXjwFnRH3ZLnGfCl1vcQl_5A
+wrapping_accessor:               YOpNR7QPGcZ4I6sfKhkd53RA
+wrapping_token_ttl:              30m
+wrapping_token_creation_time:    2022-05-04 16:35:22.809838135 +0000 UTC
+wrapping_token_creation_path:    sys/replication/performance/primary/secondary-token
+root@vault-eu-1:~# 
+
+NA-1
+vault write sys/replication/performance/secondary/enable ca_file=/etc/consul.d/tls/consul-agent-ca.pem token=eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NvciI6IiIsImFkZHIiOiJodHRwczovLzEwLjEzMi4yLjYzOjQ0MyIsImV4cCI6MTY1MTY4MzkyMiwiaWF0IjoxNjUxNjgyMTIyLCJqdGkiOiJzLmFJdWRNUVR0dWZtVWg2b1RNUmV6Z1BqWiIsIm5iZiI6MTY1MTY4MjExNywidHlwZSI6IndyYXBwaW5nIn0.ATTCbwkwRqhHEoavs4YeDkV5vqedB9iFlBaHiOk0ogLFykKriJnSNNnD1UfnzD3IiZdDzy4htDC3RCqwv2XD9hetAAI403_-jYk8l_we5zzP8jyKGlZhGsSKxdlZfqpKcX189OWr_O2vx0N8F6mlmXF4qXjwFnRH3ZLnGfCl1vcQl_5A
+
+EU-1
+vault read sys/replication/performance/status
+
+
+EU-1
+root@vault-eu-1:~# vault read sys/replication/performance/status
+Key                     Value
+---                     -----
+cluster_id              ae1c6ef7-2e53-a304-cdb6-8175a60a0f7f
+known_secondaries       [NA-1]
+last_performance_wal    38
+last_reindex_epoch      0
+last_wal                53
+merkle_root             c97ae8c6cdbc320e9622e2ec00a894b7a17be689
+mode                    primary
+primary_cluster_addr    n/a
+secondaries             [map[api_address:https://10.132.2.70:443 cluster_address:https://10.132.2.70:444 connection_status:connected last_heartbeat:2022-05-04T16:40:58Z node_id:NA-1]]
+state                   running
+root@vault-eu-1:~# 
+
+NA-1
+root@vault-na-1:~# vault read sys/replication/performance/status
+Key                            Value
+---                            -----
+cluster_id                     ae1c6ef7-2e53-a304-cdb6-8175a60a0f7f
+connection_state               ready
+known_primary_cluster_addrs    [https://10.132.2.63:444]
+last_reindex_epoch             1651682423
+last_remote_wal                0
+merkle_root                    c97ae8c6cdbc320e9622e2ec00a894b7a17be689
+mode                           secondary
+primaries                      [map[api_address:https://10.132.2.63:443 cluster_address:https://10.132.2.63:444 connection_status:connected last_heartbeat:2022-05-04T16:43:58Z]]
+primary_cluster_addr           https://10.132.2.63:444
+secondary_id                   NA-1
+state                          stream-wals
+root@vault-na-1:~# 
+
+
+
+NA-1
+root@vault-na-1:~# vault operator generate-root -generate-otp
+Nplg7VXIiR47kn2sWz3f1mzHJt
+root@vault-na-1:~# 
+
+vault operator generate-root -init -otp=Nplg7VXIiR47kn2sWz3f1mzHJt
+
+root@vault-na-1:~# vault operator generate-root -init -otp=Nplg7VXIiR47kn2sWz3f1mzHJt
+Nonce         362316e2-d3dd-228c-a68f-33b23c864e42
+Started       true
+Progress      0/2
+Complete      false
+OTP Length    26
+root@vault-na-1:~# 
+---------------------------------------------------------------------------------------------
+root@vault-eu-1:~# cat /root/config-files/vault/initialization.txt 
+Recovery Key 1: lg3FVzminpLNCwFsUBPODrkx1cB05baq4q9aeTKikbKV
+Recovery Key 2: upZcZbUB2GJh32WgBWWzs+w5G2TeR6++na0ybEbm/RSk
+Recovery Key 3: 3ybQT6RXXSydBDFwWfbyqrDJ92hmD7o94JHu8elfWSSs
+
+Initial Root Token: s.ipmDpte8aCPU9mRnzD8Uz62d
+
+Success! Vault is initialized
+
+Recovery key initialized with 3 key shares and a key threshold of 2. Please
+securely distribute the key shares printed above.
+root@vault-eu-1:~# 
+
+-------------------------------------------------------------------------------------------------
+root@vault-na-1:~# vault operator generate-root -generate-otp
+Nplg7VXIiR47kn2sWz3f1mzHJt
+root@vault-na-1:~# vault operator generate-root -init -otp=Nplg7VXIiR47kn2sWz3f1mzHJt
+Nonce         362316e2-d3dd-228c-a68f-33b23c864e42
+Started       true
+Progress      0/2
+Complete      false
+OTP Length    26
+root@vault-na-1:~# vault operator generate-root
+Operation nonce: 362316e2-d3dd-228c-a68f-33b23c864e42
+Unseal Key (will be hidden): 
+Nonce       362316e2-d3dd-228c-a68f-33b23c864e42
+Started     true
+Progress    1/2
+Complete    false
+root@vault-na-1:~# vault operator generate-root
+Operation nonce: 362316e2-d3dd-228c-a68f-33b23c864e42
+Unseal Key (will be hidden): 
+Nonce            362316e2-d3dd-228c-a68f-33b23c864e42
+Started          true
+Progress         2/2
+Complete         true
+Encoded Token    PV5bVHAVLnwgGkxxDh5LPg5DQSN5DggLAj8
+root@vault-na-1:~# 
+
+
+
+vault operator generate-root -decode=PV5bVHAVLnwgGkxxDh5LPg5DQSN5DggLAj8 -otp=Nplg7VXIiR47kn2sWz3f1mzHJt
+
+root@vault-na-1:~# vault operator generate-root -generate-otp
+Nplg7VXIiR47kn2sWz3f1mzHJt
+root@vault-na-1:~# vault operator generate-root -init -otp=Nplg7VXIiR47kn2sWz3f1mzHJt
+Nonce         362316e2-d3dd-228c-a68f-33b23c864e42
+Started       true
+Progress      0/2
+Complete      false
+OTP Length    26
+root@vault-na-1:~# vault operator generate-root
+Operation nonce: 362316e2-d3dd-228c-a68f-33b23c864e42
+Unseal Key (will be hidden): 
+Nonce       362316e2-d3dd-228c-a68f-33b23c864e42
+Started     true
+Progress    1/2
+Complete    false
+root@vault-na-1:~# vault operator generate-root
+Operation nonce: 362316e2-d3dd-228c-a68f-33b23c864e42
+Unseal Key (will be hidden): 
+Nonce            362316e2-d3dd-228c-a68f-33b23c864e42
+Started          true
+Progress         2/2
+Complete         true
+Encoded Token    PV5bVHAVLnwgGkxxDh5LPg5DQSN5DggLAj8
+root@vault-na-1:~# vault operator generate-root -decode=PV5bVHAVLnwgGkxxDh5LPg5DQSN5DggLAj8 -otp=Nplg7VXIiR47kn2sWz3f1mzHJt
+s.73GCv5IHxFepyMY9rEHcrCHK
+root@vault-na-1:~# 
+
+-----------------------------------------------------------------------------------------
+
+export VAULT_TOKEN=s.73GCv5IHxFepyMY9rEHcrCHK
+
+
+sed -i '$d' /root/.bash_profile
+echo "export VAULT_TOKEN=$VAULT_TOKEN" >> /root/.bash_profile
+
+-----------------------------------------------------------------------------------------
+
+root@vault-na-1:~# vault kv get GDPR_Data/credit_scores
+Error making API request.
+
+URL: GET https://127.0.0.1:443/v1/sys/internal/ui/mounts/GDPR_Data/credit_scores
+Code: 403. Errors:
+
+* permission denied
+root@vault-na-1:~# vault operator generate-root -generate-otp
+Nplg7VXIiR47kn2sWz3f1mzHJt
+root@vault-na-1:~# vault operator generate-root -init -otp=Nplg7VXIiR47kn2sWz3f1mzHJt
+Nonce         362316e2-d3dd-228c-a68f-33b23c864e42
+Started       true
+Progress      0/2
+Complete      false
+OTP Length    26
+root@vault-na-1:~# vault operator generate-root
+Operation nonce: 362316e2-d3dd-228c-a68f-33b23c864e42
+Unseal Key (will be hidden): 
+Nonce       362316e2-d3dd-228c-a68f-33b23c864e42
+Started     true
+Progress    1/2
+Complete    false
+root@vault-na-1:~# vault operator generate-root
+Operation nonce: 362316e2-d3dd-228c-a68f-33b23c864e42
+Unseal Key (will be hidden): 
+Nonce            362316e2-d3dd-228c-a68f-33b23c864e42
+Started          true
+Progress         2/2
+Complete         true
+Encoded Token    PV5bVHAVLnwgGkxxDh5LPg5DQSN5DggLAj8
+root@vault-na-1:~# vault operator generate-root -decode=PV5bVHAVLnwgGkxxDh5LPg5DQSN5DggLAj8 -otp=Nplg7VXIiR47kn2sWz3f1mzHJt
+s.73GCv5IHxFepyMY9rEHcrCHK
+root@vault-na-1:~# export VAULT_TOKEN=s.73GCv5IHxFepyMY9rEHcrCHK
+root@vault-na-1:~# sed -i '$d' /root/.bash_profile
+root@vault-na-1:~# echo "export VAULT_TOKEN=$VAULT_TOKEN" >> /root/.bash_profile
+root@vault-na-1:~# vault kv get GDPR_Data/credit_scores
+====== Metadata ======
+Key              Value
+---              -----
+created_time     2022-05-04T16:33:06.679357554Z
+deletion_time    n/a
+destroyed        false
+version          1
+
+===== Data =====
+Key       Value
+---       -----
+Heike     78
+John      87
+Pierre    90
+root@vault-na-1:~# 
+------------------------------------------------------------------------------------------------------------------------------
+
+
+

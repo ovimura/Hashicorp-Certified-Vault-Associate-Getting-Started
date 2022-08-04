@@ -12,7 +12,7 @@ vault server -dev
 
 # Open a second console and save the token in a variable
 # DO NOT USE VAULT_TOKEN for the variable name
-$root_token="ROOT_TOKEN_VALUE"
+$root_token="s.6lJzIMWPKKSt10QUNxTMFv5Y"
 
 # Let's log into the Vault server using our root token
 # and the Vault server address. The default launch

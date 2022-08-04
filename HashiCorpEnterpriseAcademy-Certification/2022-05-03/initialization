@@ -1,0 +1,200 @@
+Command failed. Attempt 2/5:
+Unseal Key 1: KUWP6JeC00Bb2F4F0gHlIcfoTd+c25ZbRuu1H4EB6Qmc
+Unseal Key 2: 6Sum58Yuq7jH8/mb1fHWdRK81jL/yZAAr0EvsV9g78gY
+Unseal Key 3: 00FsFd1vekUFKGhIY0jByQcAouB2UKNOXzPe4Zr43HcW
+
+Initial Root Token: s.DTKxtX659b8sicPE9OJvURPN
+
+Vault initialized with 3 key shares and a key threshold of 2. Please securely
+distribute the key shares printed above. When the Vault is re-sealed,
+restarted, or stopped, you must supply at least 2 of these keys to unseal it
+before it can start servicing requests.
+
+Vault does not store the generated master key. Without at least 2 keys to
+reconstruct the master key, Vault will remain permanently sealed!
+
+It is possible to generate new unseal keys, provided you have a quorum of
+existing unseal keys shares. See "vault operator rekey" for more information.
+
+---------------------------------------------------------------------------------
+Generate an encoded root token:
+
+root@vault-server-1:~# vault operator generate-root -generate-otp
+s5ybte3nBYjjumT8MEGYcQ8GgG
+
+---------------------------------------------------------------------------------
+
+vault operator generate-root -init -otp=s5ybte3nBYjjumT8MEGYcQ8GgG
+
+
+vault operator generate-root -decode=<token> -otp=<otp>
+---------------------------------------------------------------------------------
+
+root@vault-server-1:~# vault token revoke -self
+Success! Revoked token (if it existed)
+root@vault-server-1:~# vault token revoke <your_token>
+bash: syntax error near unexpected token `newline'
+root@vault-server-1:~# vault operator generate-root -generate-otp
+s5ybte3nBYjjumT8MEGYcQ8GgG
+root@vault-server-1:~# vault operator generate-root -init -otp=s5ybte3nBYjjumT8MEGYcQ8GgG
+Nonce         05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Started       true
+Progress      0/2
+Complete      false
+OTP Length    26
+root@vault-server-1:~# vault operator generate-root
+Operation nonce: 05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Unseal Key (will be hidden): 
+Nonce       05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Started     true
+Progress    1/2
+Complete    false
+root@vault-server-1:~# vault operator generate-root
+Operation nonce: 05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Unseal Key (will be hidden): 
+Nonce            05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Started          true
+Progress         2/2
+Complete         true
+Encoded Token    ABseBEAcdD4EEgscIVUscisVFSARNHsNPj0
+root@vault-server-1:~# 
+------------------------------------------------------------------------
+
+
+
+
+vault operator generate-root -decode=ABseBEAcdD4EEgscIVUscisVFSARNHsNPj0 -otp=s5ybte3nBYjjumT8MEGYcQ8GgG
+
+----------------------------------------------------------------------------
+
+root@vault-server-1:~# vault token revoke -self
+Success! Revoked token (if it existed)
+root@vault-server-1:~# vault token revoke <your_token>
+bash: syntax error near unexpected token `newline'
+root@vault-server-1:~# vault operator generate-root -generate-otp
+s5ybte3nBYjjumT8MEGYcQ8GgG
+root@vault-server-1:~# vault operator generate-root -init -otp=s5ybte3nBYjjumT8MEGYcQ8GgG
+Nonce         05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Started       true
+Progress      0/2
+Complete      false
+OTP Length    26
+root@vault-server-1:~# vault operator generate-root
+Operation nonce: 05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Unseal Key (will be hidden): 
+Nonce       05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Started     true
+Progress    1/2
+Complete    false
+root@vault-server-1:~# vault operator generate-root
+Operation nonce: 05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Unseal Key (will be hidden): 
+Nonce            05ffd0a5-3edd-7b55-4f20-50dc2a3c3354
+Started          true
+Progress         2/2
+Complete         true
+Encoded Token    ABseBEAcdD4EEgscIVUscisVFSARNHsNPj0
+root@vault-server-1:~# vault operator generate-root -decode=ABseBEAcdD4EEgscIVUscisVFSARNHsNPj0 -otp=s5ybte3nBYjjumT8MEGYcQ8GgG
+s.gf4yGPFKavT8xJfPRyreCJYz
+root@vault-server-1:~# 
+--------------------------------------------------------------------------------
+root@vault-server-1:~# vault operator generate-root -decode=ABseBEAcdD4EEgscIVUscisVFSARNHsNPj0 -otp=s5ybte3nBYjjumT8MEGYcQ8GgG
+s.gf4yGPFKavT8xJfPRyreCJYz
+root@vault-server-1:~# export VAULT_TOKEN=s.gf4yGPFKavT8xJfPRyreCJYz
+root@vault-server-1:~# 
+--------------------------------------------------------------------------------
+root@vault-server-1:~# export VAULT_TOKEN=s.gf4yGPFKavT8xJfPRyreCJYz
+root@vault-server-1:~# vault secrets list
+Path          Type         Accessor              Description
+----          ----         --------              -----------
+cubbyhole/    cubbyhole    cubbyhole_732f8008    per-token private secret storage
+identity/     identity     identity_a03145da     identity store
+kv/           kv           kv_b39508be           n/a
+sys/          system       system_f60ac0a3       system endpoints used for control, policy and debugging
+root@vault-server-1:~# 
+--------------------------------------------------------------------------------
+root@vault-server-1:~# vault operator rekey -init -key-shares=3 -key-threshold=2
+WARNING! If you lose the keys after they are returned, there is no recovery.
+Consider canceling this operation and re-initializing with the -pgp-keys flag
+to protect the returned unseal keys along with -backup to allow recovery of
+the encrypted keys in case of emergency. You can delete the stored keys later
+using the -delete flag.
+
+Key                      Value
+---                      -----
+Nonce                    edfa6ab0-22c1-ce90-6b4b-7c131b075402
+Started                  true
+Rekey Progress           0/2
+New Shares               3
+New Threshold            2
+Verification Required    false
+root@vault-server-1:~# vault operator rekey | tee /root/config-files/rekey.txt
+Rekey operation nonce: edfa6ab0-22c1-ce90-6b4b-7c131b075402
+Unseal Key (will be hidden): 
+Key                      Value
+---                      -----
+Nonce                    edfa6ab0-22c1-ce90-6b4b-7c131b075402
+Started                  true
+Rekey Progress           1/2
+New Shares               3
+New Threshold            2
+Verification Required    false
+root@vault-server-1:~# vault operator rekey | tee /root/config-files/rekey.txt
+Rekey operation nonce: edfa6ab0-22c1-ce90-6b4b-7c131b075402
+Unseal Key (will be hidden): 
+
+Key 1: sZOXYHHVFZn5FRGmff2sqE9m9/h8mYDSRZNjHNLqMOOa
+Key 2: jP0lPv8xBfuDJV5ZMQET/ptVKNJQBJABahEpQOiBrzmw
+Key 3: W8RuBTu38k82J8o2TYaNMx+/smEo32cW+liey6ybxIAD
+
+Operation nonce: edfa6ab0-22c1-ce90-6b4b-7c131b075402
+
+Vault rekeyed with 3 key shares and a key threshold of 2. Please securely
+distribute the key shares printed above. When Vault is re-sealed, restarted,
+or stopped, you must supply at least 2 of these keys to unseal it before it
+can start servicing requests.
+root@vault-server-1:~# 
+--------------------------------------------------------------------------------------
+
+root@vault-server-1:~# export VAULT_TOKEN=s.gf4yGPFKavT8xJfPRyreCJYz
+root@vault-server-1:~# vault operator rotate
+Success! Rotated key
+
+Key Term            2
+Install Time        03 May 22 21:14 UTC
+Encryption Count    4
+root@vault-server-1:~# 
+
+--------------------------------------------------------------------------------------
+
+root@cloud-client:~# gcloud kms keyrings create vault-auto-unseal-kr --location europe-west1
+root@cloud-client:~# gcloud kms keys create vault-auto-unseal-key --location europe-west1 --keyring vault-auto-unseal-kr --purpose encryption
+root@cloud-client:~# gcloud kms keyrings add-iam-policy-binding vault-auto-unseal-kr --location europe-west1 --member serviceAccount:$INSTRUQT_GCP_PROJECT_VAULT_GCP_AUTO_UNSEAL_SERVICE_ACCOUNT_EMAIL --role roles/cloudkms.cryptoKeyEncrypterDecrypter
+Updated IAM policy for keyring [vault-auto-unseal-kr].
+bindings:
+- members:
+  - serviceAccount:service-account@p-phydgz44us1shh8yehztm0fdc7i9.iam.gserviceaccount.com
+  role: roles/cloudkms.cryptoKeyEncrypterDecrypter
+etag: BwXeIgvCHQ4=
+version: 1
+root@cloud-client:~# 
+--------------------------------------------------------------------------------------
+
+vault operator raft list-peers
+--------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

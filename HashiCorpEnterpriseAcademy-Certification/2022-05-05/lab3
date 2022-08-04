@@ -1,0 +1,28 @@
+root@vault-server:~# vault status
+Key                      Value
+---                      -----
+Recovery Seal Type       shamir
+Initialized              true
+Sealed                   false
+Total Recovery Shares    3
+Threshold                2
+Version                  1.9.4+ent
+Storage Type             raft
+Cluster Name             vault-cluster-cb88bfb5
+Cluster ID               cf6dd41c-46a8-a8d7-36b3-3e9214d02ee4
+HA Enabled               true
+HA Cluster               https://vault-server:8201
+HA Mode                  active
+Active Since             2022-05-05T14:45:46.106059658Z
+Raft Committed Index     7425
+Raft Applied Index       7425
+Last WAL                 21
+root@vault-server:~# vault read sys/license/status
+Key                   Value
+---                   -----
+autoloaded            map[expiration_time:2023-06-03T00:00:00Z features:[HSM Performance Replication DR Replication MFA Sentinel Seal Wrapping Control Groups Performance Standby Namespaces KMIP Entropy Augmentation Transform Secrets Engine Lease Count Quotas Key Management Secrets Engine Automated Snapshots] license_id:f89dce93-cd1e-6f39-a201-04849cd50fe7 performance_standby_count:9999 start_time:2022-03-03T00:00:00Z]
+autoloading_used      true
+persisted_autoload    map[expiration_time:2023-06-03T00:00:00Z features:[HSM Performance Replication DR Replication MFA Sentinel Seal Wrapping Control Groups Performance Standby Namespaces KMIP Entropy Augmentation Transform Secrets Engine Lease Count Quotas Key Management Secrets Engine Automated Snapshots] license_id:f89dce93-cd1e-6f39-a201-04849cd50fe7 performance_standby_count:9999 start_time:2022-03-03T00:00:00Z]
+root@vault-server:~# cat /root/config-files/initialization.txt | grep Root
+Initial Root Token: s.19Ei1TebxuMD8VTxT1xdhzGR
+root@vault-server:~# 

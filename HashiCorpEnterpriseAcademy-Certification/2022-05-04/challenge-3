@@ -1,0 +1,60 @@
+root@vault-eu-1:~# vault write sys/replication/performance/primary/paths-filter/NA-1 mode=deny paths=GDPR_Data/
+Success! Data written to: sys/replication/performance/primary/paths-filter/NA-1
+root@vault-eu-1:~# 
+
+root@vault-na-1:~# vault kv get GDPR_Data/credit_scores
+Error making API request.
+
+URL: GET https://127.0.0.1:443/v1/sys/internal/ui/mounts/GDPR_Data/credit_scores
+Code: 403. Errors:
+
+* preflight capability check returned 403, please ensure client's policies grant access to path "GDPR_Data/credit_scores/"
+root@vault-na-1:~# vault kv get Non_GDPR_Data/capitals
+====== Metadata ======
+Key              Value
+---              -----
+created_time     2022-05-04T16:33:05.542749506Z
+deletion_time    n/a
+destroyed        false
+version          1
+
+===== Data =====
+Key        Value
+---        -----
+England    London
+France     Paris
+Germany    Berlin
+root@vault-na-1:~# 
+
+root@vault-na-1:~# vault secrets enable -path=Replicated_Data kv-v2
+Success! Enabled the kv-v2 secrets engine at: Replicated_Data/
+root@vault-na-1:~# 
+
+root@vault-na-1:~# vault secrets enable -path=Local_Data -local=true kv-v2
+Success! Enabled the kv-v2 secrets engine at: Local_Data/
+root@vault-na-1:~#
+
+
+vault kv put Replicated_Data/capitals US=Washington Mexico="Mexico City" Canada=Ottawa
+vault kv put Local_Data/credit_scores Tim=90 Susan=80 Linda=85
+-------------------------------------------------------------------------------------------------------------
+root@vault-na-1:~# vault kv put Replicated_Data/capitals US=Washington Mexico="Mexico City" Canada=Ottawa
+Key              Value
+---              -----
+created_time     2022-05-04T17:09:43.866102283Z
+deletion_time    n/a
+destroyed        false
+version          1
+root@vault-na-1:~# vault kv put Local_Data/credit_scores Tim=90 Susan=80 Linda=85
+Key              Value
+---              -----
+created_time     2022-05-04T17:09:45.283281023Z
+deletion_time    n/a
+destroyed        false
+version          1
+root@vault-na-1:~# 
+--------------------------------------------------------------------------------------------------------------
+
+
+
+

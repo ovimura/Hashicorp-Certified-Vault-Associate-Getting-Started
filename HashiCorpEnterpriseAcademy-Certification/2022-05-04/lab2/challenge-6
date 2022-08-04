@@ -1,0 +1,42 @@
+root@vault-server:~# cd /root/config-files/vault
+bash: cd: /root/config-files/vault: No such file or directory
+root@vault-server:~# vault auth list -format=json | jq -r '.["userpass/"].accessor' > accessor.txt
+root@vault-server:~# accessor=$(cat accessor.txt)
+root@vault-server:~# sed -i "s/MOUNT_ACCESSOR/$accessor/g" /root/config-files/policies/templated-user-access-policy.hcl
+root@vault-server:~# vault policy write user-access /root/config-files/policies/templated-user-access-policy.hcl
+Success! Uploaded policy: user-access
+root@vault-server:~# vault policy delete harry
+Success! Deleted policy: harry
+root@vault-server:~# vault policy delete mary
+Success! Deleted policy: mary
+root@vault-server:~# vault write auth/userpass/users/harry/policies policies=user-access
+Success! Data written to: auth/userpass/users/harry/policies
+root@vault-server:~# vault write auth/userpass/users/mary/policies policies=user-access
+Success! Data written to: auth/userpass/users/mary/policies
+root@vault-server:~# vault write auth/userpass/users/cary password=carry policies=user-access
+Success! Data written to: auth/userpass/users/cary
+root@vault-server:~# unset VAULT_TOKEN
+root@vault-server:~# vault login -method=userpass username=cary password=carry
+Success! You are now authenticated. The token information displayed below
+is already stored in the token helper. You do NOT need to run "vault login"
+again. Future Vault requests will automatically use this token.
+
+Key                    Value
+---                    -----
+token                  s.vvmIprUtJ8pqDt1U4SvkWOro
+token_accessor         YsvdrMTNMkxxPt8mlAMl27Rd
+token_duration         768h
+token_renewable        true
+token_policies         ["default" "user-access"]
+identity_policies      []
+policies               ["default" "user-access"]
+token_meta_username    cary
+root@vault-server:~# vault kv put kv/users/cary/bio lastname=Grant age=99 gender=male
+Key                Value
+---                -----
+created_time       2022-05-04T20:21:44.115101966Z
+custom_metadata    <nil>
+deletion_time      n/a
+destroyed          false
+version            1
+root@vault-server:~# 
